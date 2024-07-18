@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unused_import, avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';

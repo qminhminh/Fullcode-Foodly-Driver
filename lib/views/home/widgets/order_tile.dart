@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, unused_local_variable
+// ignore_for_file: unrelated_type_equality_checks, unused_local_variable, prefer_const_constructors_in_immutables
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodly_driver/common/app_style.dart';
@@ -51,20 +51,20 @@ class OrderTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         controller.order = order;
-        controller.setDistance = distanceToRestaurant + distanceFromRestaurantToClient;
-       
-       if(order.orderStatus == "Delivered"){
-        Get.to(() => const DeliveredPage(),
-            transition: Transition.fadeIn,
-            duration: const Duration(seconds: 2));
-             activeOrder = const DeliveredPage();
-       }else{
-         Get.to(() => const ReadyPage(),
-            transition: Transition.fadeIn,
-            duration: const Duration(seconds: 2));
-              activeOrder = const ActivePage();
-       }
+        controller.setDistance =
+            distanceToRestaurant + distanceFromRestaurantToClient;
 
+        if (order.orderStatus == "Delivered") {
+          Get.to(() => const DeliveredPage(),
+              transition: Transition.fadeIn,
+              duration: const Duration(seconds: 2));
+          activeOrder = const DeliveredPage();
+        } else {
+          Get.to(() => const ReadyPage(),
+              transition: Transition.fadeIn,
+              duration: const Duration(seconds: 2));
+          activeOrder = const ActivePage();
+        }
       },
       child: Stack(
         clipBehavior: Clip.hardEdge,
@@ -87,9 +87,16 @@ class OrderTile extends StatelessWidget {
                         height: 75.h,
                         width: 70.h,
                         child: Image.network(
-                          order.orderItems[0].foodId.imageUrl[0],
-                          fit: BoxFit.cover,
-                        )),
+                            order.orderItems[0].foodId.imageUrl[0],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                          return const Center(
+                            child: Icon(
+                              Icons.error,
+                              color: kPrimary,
+                            ),
+                          );
+                        })),
                   ),
                   const SizedBox(
                     width: 10,
@@ -107,8 +114,7 @@ class OrderTile extends StatelessWidget {
                       OrderRowText(
                           text: "📌 ${order.restaurantId.coords.address}"),
                       OrderRowText(
-                          text:
-                              "🏠 ${order.deliveryAddress.addressLine1}"),
+                          text: "🏠 ${order.deliveryAddress.addressLine1}"),
                       Row(
                         children: [
                           Container(
@@ -199,13 +205,15 @@ class OrderTile extends StatelessWidget {
                 child: ReusableText(
                   text: order.orderStatus == "Out_for_Delivery"
                       ? "Active"
-                      : order.orderStatus == "Delivered" ? "Delivered" : "Pick Up",
+                      : order.orderStatus == "Delivered"
+                          ? "Delivered"
+                          : "Pick Up",
                   style: appStyle(11, kLightWhite, FontWeight.w500),
                 ),
               ),
             ),
           ),
-           Positioned(
+          Positioned(
               right: 70.h,
               top: 6.h,
               child: ClipRRect(
@@ -214,7 +222,15 @@ class OrderTile extends StatelessWidget {
                   width: 19.h,
                   height: 19.h,
                   child: Image.network(order.restaurantId.logoUrl,
-                      fit: BoxFit.cover),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(
+                        Icons.error,
+                        color: kPrimary,
+                      ),
+                    );
+                  }),
                 ),
               ))
         ],

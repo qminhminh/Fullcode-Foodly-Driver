@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, unused_local_variable
+// ignore_for_file: unrelated_type_equality_checks, unused_local_variable, avoid_print
 
 import 'dart:async';
 
@@ -271,23 +271,28 @@ class _ActivePageState extends State<ActivePage> {
                               ),
                               const Divida(),
                               Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ReusableText(text: "Restaurant", style: appStyle(10, kGray , FontWeight.w500)),
-                                    SizedBox(
-                                      width: width * 0.63,
-                                      child: Text(orderController
-                                        .order!.restaurantId.coords.address,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ReusableText(
+                                      text: "Restaurant",
+                                      style:
+                                          appStyle(10, kGray, FontWeight.w500)),
+                                  SizedBox(
+                                    width: width * 0.63,
+                                    child: Text(
+                                        orderController
+                                            .order!.restaurantId.coords.address,
                                         maxLines: 2,
-                                          style: appStyle(10, kGray, FontWeight.w400 )),
-                                    )
-                                  ],
-                                ),
-
+                                        style: appStyle(
+                                            10, kGray, FontWeight.w400)),
+                                  )
+                                ],
+                              ),
                               RowText(
                                   first: "Recipient",
-                                  second:
-                                      orderController.order!.deliveryAddress.addressLine1),
+                                  second: orderController
+                                      .order!.deliveryAddress.addressLine1),
                               SizedBox(
                                 height: 10.h,
                               ),

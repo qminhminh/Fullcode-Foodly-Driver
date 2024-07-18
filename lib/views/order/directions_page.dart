@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields, avoid_print
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -203,8 +205,7 @@ class _DirectionsPageState extends State<DirectionsPage> {
                         CircleAvatar(
                           radius: 18,
                           backgroundColor: kTertiary,
-                          backgroundImage:
-                              NetworkImage(image),
+                          backgroundImage: NetworkImage(image),
                         ),
                       ],
                     ),
@@ -263,7 +264,8 @@ class _DirectionsPageState extends State<DirectionsPage> {
                   color: kOffWhite,
                   border: Border.all(color: kPrimary, width: 1),
                   borderRadius: BorderRadius.circular(20.r)),
-                  child: const RowText(first: "Picking order from", second: "The Kings"),
+              child: const RowText(
+                  first: "Picking order from", second: "The Kings"),
             ),
           )
         ],

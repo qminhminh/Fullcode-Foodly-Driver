@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodly_driver/common/app_style.dart';
@@ -34,7 +36,8 @@ class WaitingPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ReusableText(
-                        text: "Status: ${driverController.driver!.verification}",
+                        text:
+                            "Status: ${driverController.driver!.verification}",
                         style: appStyle(14, kGray, FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
