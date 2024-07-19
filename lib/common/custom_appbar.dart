@@ -138,7 +138,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   }
 
   String profile =
-      'https://d326fntlu7tb1e.cloudfront.net/uploads/51530ae8-32b8-4a04-89b3-17f40a2f4cc1-avatar.png';
+      'https://res.cloudinary.com/dp2bicmif/image/upload/v1721315877/logo_hrsyqx.png';
   LatLng _center = const LatLng(37.78792117665919, -122.41325651079953);
   Placemark? currentLocation;
 

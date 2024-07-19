@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
     final controller = Get.put(LoginController());
 
     if (token != null) {
-     user = controller.getUserData();
+      user = controller.getUserData();
     }
 
     return token == null
@@ -34,8 +34,9 @@ class ProfilePage extends StatelessWidget {
         : Scaffold(
             backgroundColor: kPrimary,
             appBar: PreferredSize(
-                preferredSize: Size.fromHeight(50.h),
-                child: const ProfileAppBar()),
+              preferredSize: Size.fromHeight(50.h),
+              child: const ProfileAppBar(),
+            ),
             body: SafeArea(
               child: CustomContainer(
                   containerContent: Column(
@@ -58,8 +59,8 @@ class ProfilePage extends StatelessWidget {
                                     width: 35,
                                     child: CircleAvatar(
                                       backgroundColor: Colors.grey.shade100,
-                                      backgroundImage:  NetworkImage(
-                                          user!.profile),
+                                      backgroundImage:
+                                          NetworkImage(user!.profile),
                                     ),
                                   ),
                                   const SizedBox(
@@ -102,10 +103,10 @@ class ProfilePage extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    height: 140.h,
+                    height: 170.h,
                     decoration: const BoxDecoration(color: Colors.white),
                     child: ListView(
-                     padding: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
                       children: [
                         TilesWidget(
                           onTap: () {
@@ -118,7 +119,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                         TilesWidget(
                           onTap: () {
-                             Get.to(() => const WalletPage(),
+                            Get.to(() => const WalletPage(),
                                 transition: Transition.fade,
                                 duration: const Duration(seconds: 2));
                           },
@@ -130,7 +131,6 @@ class ProfilePage extends StatelessWidget {
                           title: "My Reviews",
                           leading: MaterialCommunityIcons.message_outline,
                         ),
-                        
                       ],
                     ),
                   ),
@@ -138,10 +138,10 @@ class ProfilePage extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    height: 200.h,
+                    height: 220.h,
                     decoration: const BoxDecoration(color: Colors.white),
                     child: ListView(
-                       padding: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
                       children: [
                         TilesWidget(
                           onTap: () {
