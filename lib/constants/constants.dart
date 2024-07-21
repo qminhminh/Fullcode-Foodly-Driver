@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 String googleApiKey = 'AIzaSyAYgK10l_C_HG-pSeVBVUxChyGSm6wa78Q';
 
-const kPrimary = Color(0xFF30b9b2);
+const kPrimary = Color.fromARGB(255, 240, 185, 96);
 const kPrimaryLight = Color(0xFF40F3EA);
-const kSecondary = Color(0xffffa44f);
+const kSecondary = Color.fromARGB(255, 163, 83, 7);
 const kSecondaryLight = Color(0xFFffe5db);
 const kTertiary = Color(0xff0078a6);
 const kGray = Color(0xff83829A);
