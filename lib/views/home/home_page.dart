@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,9 +7,11 @@ import 'package:foodly_driver/common/app_style.dart';
 import 'package:foodly_driver/common/custom_appbar.dart';
 import 'package:foodly_driver/common/custom_container.dart';
 import 'package:foodly_driver/constants/constants.dart';
+import 'package:foodly_driver/views/home/chat_tab.dart';
 import 'package:foodly_driver/views/home/driver_orders/active.dart';
 import 'package:foodly_driver/views/home/driver_orders/delivered.dart';
 import 'package:foodly_driver/views/home/driver_orders/pending.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulHookWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -89,6 +93,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ],
               ),
             ),
+          ),
+        ),
+        floatingActionButton: Container(
+          margin: const EdgeInsets.only(bottom: 80.0),
+          child: FloatingActionButton(
+            focusColor: kPrimary,
+            hoverColor: kPrimary,
+            onPressed: () {
+              Get.to(
+                () => const ChatTab(),
+                duration: const Duration(milliseconds: 400),
+                transition: Transition.fadeIn,
+              );
+            },
+            child: const Icon(Icons.chat_bubble),
+            backgroundColor: kPrimary,
           ),
         ),
       ),

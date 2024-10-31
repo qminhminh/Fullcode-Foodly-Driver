@@ -56,12 +56,12 @@ class _ReadyPageState extends State<ReadyPage> {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
+    // Kiểm tra nếu dịch vụ vị trí được bật.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
+      // Dịch vụ vị trí không được bật không tiếp tục
+// truy cập vị trí và yêu cầu người dùng của
+// Ứng dụng để bật các dịch vụ vị trí.
       return Future.error('Location services are disabled.');
     }
 
@@ -69,29 +69,30 @@ class _ReadyPageState extends State<ReadyPage> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
+        // Quyền bị từ chối, lần tới khi bạn có thể thử
+// yêu cầu quyền một lần nữa (đây cũng là nơi
+//
+// trả về đúng.Theo hướng dẫn của Android
+// Ứng dụng của bạn sẽ hiển thị giao diện người dùng giải thích ngay bây giờ.
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
+      // Quyền được từ chối mãi mãi, xử lý một cách thích hợp.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
+    // Khi chúng tôi đến đây, các quyền được cấp và chúng tôi có thể
+// Tiếp tục truy cập vị trí của thiết bị.
     _getCurrentLocation();
   }
 
   Future<void> _getCurrentLocation() async {
     var currentLocation = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
+        desiredAccuracy: LocationAccuracy
+            .best); //vị trí hiện tại của thiết bị với độ chính xác cao nhất
     setState(() {
       _center = LatLng(currentLocation.latitude, currentLocation.longitude);
       mapController.animateCamera(CameraUpdate.newCameraPosition(
@@ -202,7 +203,6 @@ class _ReadyPageState extends State<ReadyPage> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 margin: EdgeInsets.fromLTRB(8.w, 8.w, 8.w, 12.h),
-                
                 decoration: BoxDecoration(
                     color: kLightWhite,
                     borderRadius: BorderRadius.circular(20.r)),
@@ -259,20 +259,17 @@ class _ReadyPageState extends State<ReadyPage> {
                             orderController.order!.restaurantId.coords.address),
                     orderController.order!.orderStatus == 'Out_for_Delivery'
                         ? RowText(
-                          color: kSecondary,
+                            color: kSecondary,
                             first: "Recipient",
-                            second:
-                                orderController.order!.deliveryAddress.addressLine1)
+                            second: orderController
+                                .order!.deliveryAddress.addressLine1)
                         : const SizedBox.shrink(),
-
-                     orderController.order!.orderStatus == 'Ready'
+                    orderController.order!.orderStatus == 'Ready'
                         ? RowText(
                             first: "Recipient",
-                            second:
-                                orderController.order!.deliveryAddress.addressLine1)
+                            second: orderController
+                                .order!.deliveryAddress.addressLine1)
                         : const SizedBox.shrink(),
-
-
                     SizedBox(
                       height: 10.h,
                     ),
@@ -289,9 +286,10 @@ class _ReadyPageState extends State<ReadyPage> {
                           )
                         : orderController.order!.orderStatus ==
                                 'Out_for_Delivery'
-                            ?  CustomButton(
-                               onTap: () {
-                                  orderController.markOrderAsDelivered(orderController.order!.id);
+                            ? CustomButton(
+                                onTap: () {
+                                  orderController.markOrderAsDelivered(
+                                      orderController.order!.id);
                                 },
                                 color: kPrimary,
                                 btnHieght: 35,
