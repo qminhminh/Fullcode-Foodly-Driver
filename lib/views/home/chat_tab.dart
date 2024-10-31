@@ -7,6 +7,8 @@ import 'package:foodly_driver/common/reusable_text.dart';
 import 'package:foodly_driver/constants/constants.dart';
 import 'package:foodly_driver/controllers/tab_controller.dart';
 import 'package:foodly_driver/views/home/widgets/chat_with_customer.dart';
+import 'package:foodly_driver/views/home/widgets/chat_with_restaurant.dart';
+
 import 'package:get/get.dart';
 
 class ChatTab extends StatefulHookWidget {
@@ -109,7 +111,7 @@ class _ChatTabState extends State<ChatTab> with TickerProviderStateMixin {
                       controller: _tabController,
                       children: const [
                         ChatWithCustomer(),
-                        ChatWithCustomer(),
+                        ChatWithRetaurant(),
                       ],
                     ),
                   ),
