@@ -52,7 +52,7 @@ class ChatTileCustomer extends HookWidget {
 
     final lastUnreadMessage = messages.value.isNotEmpty
         ? messages.value.lastWhere(
-            (msg) => msg['isRead'] == 'read',
+            (msg) => msg['isRead'] == 'unread',
             orElse: () => null,
           )
         : null;
