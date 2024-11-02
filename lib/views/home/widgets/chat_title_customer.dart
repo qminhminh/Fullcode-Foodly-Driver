@@ -50,6 +50,11 @@ class ChatTileCustomer extends HookWidget {
       }
     }
 
+    useEffect(() {
+      fetchData();
+      return null;
+    }, const []);
+
     final lastUnreadMessage = messages.value.isNotEmpty
         ? messages.value.lastWhere(
             (msg) => msg['isRead'] == 'unread',
