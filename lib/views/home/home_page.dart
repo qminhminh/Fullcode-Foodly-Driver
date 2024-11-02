@@ -1,4 +1,6 @@
-// ignore_for_file: sort_child_properties_last
+// ignore_for_file: sort_child_properties_last, unnecessary_null_comparison
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,6 +14,8 @@ import 'package:foodly_driver/views/home/driver_orders/active.dart';
 import 'package:foodly_driver/views/home/driver_orders/delivered.dart';
 import 'package:foodly_driver/views/home/driver_orders/pending.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulHookWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,8 +31,63 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     vsync: this,
   );
 
+  final box = GetStorage();
+  late final String uid = box.read("userId").replaceAll('"', '');
+
+  List<dynamic> messages = [];
+  bool isLoading = false;
+  String? error;
+
+  // Hàm fetch dữ liệu
+  Future<void> fetchData() async {
+    setState(() {
+      isLoading = true;
+      error = null;
+    });
+
+    try {
+      final url = Uri.parse('$appBaseUrl/api/chats/messages-dri/$uid');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          messages = json.decode(response.body);
+        });
+      } else {
+        throw Exception('Failed to load messages');
+      }
+    } catch (e) {
+      setState(() {
+        error = e.toString();
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> navigateToChatTab() async {
+    final result = await Get.to(() => const ChatTab(),
+        duration: const Duration(milliseconds: 400));
+
+    // Kiểm tra giá trị trả về
+    if (result == true) {
+      fetchData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final countUnreadMessage = messages.isNotEmpty
+        ? messages.where((msg) => msg['isRead'] == 'unread').toList()
+        : [];
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -96,19 +155,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ),
         floatingActionButton: Container(
-          margin: const EdgeInsets.only(bottom: 80.0),
-          child: FloatingActionButton(
-            focusColor: kPrimary,
-            hoverColor: kPrimary,
-            onPressed: () {
-              Get.to(
-                () => const ChatTab(),
-                duration: const Duration(milliseconds: 400),
-                transition: Transition.fadeIn,
-              );
-            },
-            child: const Icon(Icons.chat_bubble),
-            backgroundColor: kPrimary,
+          margin: const EdgeInsets.only(bottom: 60.0),
+          child: Stack(
+            clipBehavior: Clip.none, // Để phần badge hiển thị bên ngoài
+            children: [
+              FloatingActionButton(
+                focusColor: kPrimary,
+                hoverColor: kPrimary,
+                onPressed: navigateToChatTab,
+                child: const Icon(Icons.chat_bubble),
+                backgroundColor: kPrimary,
+              ),
+              Positioned(
+                top: 4, // Đặt vị trí của badge
+                right: 4,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red, // Màu nền cho badge
+                    shape: BoxShape.circle, // Đặt hình dạng là hình tròn
+                  ),
+                  child: Text(
+                    '${countUnreadMessage != null ? countUnreadMessage.length : 0}', // Số đếm
+                    style: const TextStyle(
+                      color: Colors.white, // Màu chữ của số đếm
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

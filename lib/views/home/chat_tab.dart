@@ -40,6 +40,13 @@ class _ChatTabState extends State<ChatTab> with TickerProviderStateMixin {
           elevation: .4,
           backgroundColor: kLightWhite,
           centerTitle: true,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () {
+              Get.back(result: true);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
           actions: [
             IconButton(
               onPressed: () {},

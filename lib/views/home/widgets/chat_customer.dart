@@ -28,7 +28,43 @@ class _ChatCustomerState extends State<ChatCustomer> {
     super.initState();
     uid = box.read("userId").replaceAll('"', '');
     _connectToServer();
-    _loadChatHistory();
+    _loadChatHistory().then((_) {
+      _markMessagesAsRead();
+    });
+  }
+
+  void _markMessagesAsRead() {
+    // Lọc ra những tin nhắn có sender khác với uid của người dùng
+    final unreadMessages = messages
+        .where((msg) => msg['sender'] != uid && msg['isRead'] == 'unread')
+        .toList();
+
+    if (unreadMessages.isNotEmpty) {
+      socket.emit('mark_as_read_driver_cus', {
+        'driverId': uid,
+        'customerId': widget.customer.id,
+      });
+
+      setState(() {
+        for (var msg in unreadMessages) {
+          msg['isRead'] =
+              'read'; // Cập nhật các tin nhắn đủ điều kiện là đã đọc
+        }
+        for (var msg in filteredMessages) {
+          if (msg['sender'] != uid && msg['isRead'] == 'unread') {
+            msg['isRead'] = 'read';
+          }
+        }
+      });
+    }
+  }
+
+  void _sendUnreadNotification(Map<String, dynamic> data) {
+    socket.emit('send_unread_notification_driver_to_cus', {
+      'customerId': widget.customer.id,
+      'driverId': uid,
+      'message': data['message'],
+    });
   }
 
   void _connectToServer() {
@@ -64,6 +100,11 @@ class _ChatCustomerState extends State<ChatCustomer> {
           'isRead': data['isRead'] ?? 'unread',
         });
       });
+      if (data['isRead'] == 'unread') {
+        _sendUnreadNotification(data);
+      }
+      //   if (data['sender'] != uid) {
+      _markMessagesAsRead();
     });
 
     socket.on('message_deleted', (data) {
@@ -71,7 +112,29 @@ class _ChatCustomerState extends State<ChatCustomer> {
         messages.removeWhere((msg) => msg['_id'] == data['messageId']);
         filteredMessages.removeWhere((msg) => msg['_id'] == data['messageId']);
       });
-      Get.snackbar("Success", "Message deleted successfully");
+      _loadChatHistory();
+      //Get.snackbar("Success", "Message deleted successfully");
+    });
+
+    socket.on('messages_marked_as_read', (data) {
+      setState(() {
+        // Cập nhật trạng thái của các tin nhắn trong messages
+        for (var messageId in data['messageIds']) {
+          final index = messages.indexWhere((msg) => msg['id'] == messageId);
+          if (index != -1) {
+            messages[index]['isRead'] = 'read';
+          }
+        }
+
+        // Cập nhật trạng thái của các tin nhắn trong filteredMessages
+        for (var messageId in data['messageIds']) {
+          final index =
+              filteredMessages.indexWhere((msg) => msg['id'] == messageId);
+          if (index != -1) {
+            filteredMessages[index]['isRead'] = 'read';
+          }
+        }
+      });
     });
   }
 
@@ -90,6 +153,7 @@ class _ChatCustomerState extends State<ChatCustomer> {
               'message': msg['message'],
               'sender': msg['sender'],
               'id': msg['_id'] ?? '',
+              'isRead': msg['isRead'] ?? 'unread',
             };
           }).toList();
           filteredMessages = List.from(messages);
@@ -128,6 +192,7 @@ class _ChatCustomerState extends State<ChatCustomer> {
         });
         _messageController.clear();
       });
+      _loadChatHistory();
     }
   }
 
@@ -157,6 +222,7 @@ class _ChatCustomerState extends State<ChatCustomer> {
                     'message': updatedMessage,
                   });
                   setState(() {
+                    _loadChatHistory();
                     messages[index]['message'] = updatedMessage;
                     filteredMessages[index]['message'] =
                         updatedMessage; // Update filteredMessages too
@@ -239,19 +305,11 @@ class _ChatCustomerState extends State<ChatCustomer> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Get.back(result: true);
           },
           icon: const Icon(Icons.arrow_back),
           color: Colors.black,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Search function
-            },
-            icon: const Icon(Icons.search),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -310,6 +368,37 @@ class _ChatCustomerState extends State<ChatCustomer> {
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            isCustomer
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      // Kiểm tra xem tin nhắn đã đọc hay chưa
+                                      Icon(
+                                        message['isRead'] == 'read'
+                                            ? Icons.check
+                                            : Icons.check_box_outline_blank,
+                                        size: 16.0,
+                                        color: message['isRead'] == 'read'
+                                            ? Colors.green
+                                            : Colors.grey,
+                                      ),
+                                      const SizedBox(
+                                          width:
+                                              4.0), // Khoảng cách giữa icon và text
+                                      Text(
+                                        message['isRead'] == 'read'
+                                            ? 'read'
+                                            : 'unread',
+                                        style: TextStyle(
+                                          color: message['isRead'] == 'read'
+                                              ? Colors.green
+                                              : Colors.grey,
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox(),
                           ],
                         ),
                       ),
