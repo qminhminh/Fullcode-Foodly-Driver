@@ -112,7 +112,6 @@ class EditProfileController extends GetxController {
   Future<void> updateProfile(String uid, String name, String phone, bool status,
       String image, String gender, String birthday) async {
     String token = box.read('token');
-    String accessToken = jsonDecode(token);
 
     Uri url = Uri.parse('$appBaseUrl/api/users/update-profile-driver');
 
@@ -121,7 +120,7 @@ class EditProfileController extends GetxController {
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
           'id': uid,
@@ -153,7 +152,6 @@ class EditProfileController extends GetxController {
 
   Future<void> getProfile(String id) async {
     String token = box.read('token');
-    String accessToken = jsonDecode(token);
 
     Uri url = Uri.parse('$appBaseUrl/api/users/get-profile-driver/$id');
 
@@ -162,7 +160,7 @@ class EditProfileController extends GetxController {
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $token',
         },
       );
 
