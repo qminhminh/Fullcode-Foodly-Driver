@@ -86,7 +86,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final countUnreadMessage = messages.isNotEmpty
-        ? messages.where((msg) => msg['isRead'] == 'unread').toList()
+        ? messages
+            .where((msg) => msg['isRead'] == 'unread' && msg['sender'] != uid)
+            .toList()
         : [];
     return DefaultTabController(
       length: 4,
