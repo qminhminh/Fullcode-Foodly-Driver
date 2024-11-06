@@ -97,19 +97,20 @@ class ChatTileRestaurants extends HookWidget {
                     child: Stack(
                       children: [
                         SizedBox(
-                            height: 70.h,
-                            width: 70.w,
-                            child: Image.network(
-                              restaurant.imageUrl,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Center(
-                                child: Icon(
-                                  Icons.error,
-                                  color: kPrimary,
-                                ),
+                          height: 70.h,
+                          width: 70.w,
+                          child: Image.network(
+                            restaurant.imageUrl,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(
+                              child: Icon(
+                                Icons.error,
+                                color: kPrimary,
                               ),
-                              fit: BoxFit.cover,
-                            )),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         Positioned(
                           bottom: 0,
                           child: Container(
@@ -144,7 +145,7 @@ class ChatTileRestaurants extends HookWidget {
                       ),
                       ReusableText(
                           text: restaurant.title,
-                          style: appStyle(11, kDark, FontWeight.w400)),
+                          style: appStyle(14, kDark, FontWeight.w400)),
                       const SizedBox(
                         height: 5,
                       ),
@@ -167,17 +168,19 @@ class ChatTileRestaurants extends HookWidget {
                             width: 1,
                           ),
                           Text(
+                            lastUnreadMessage != null
+                                ? "${lastUnreadMessage!['message']}"
+                                : "No new messages",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: appStyle(
+                              13,
                               lastUnreadMessage != null
-                                  ? "${lastUnreadMessage!['message']}"
-                                  : "No new messages",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: appStyle(
-                                  15,
-                                  lastUnreadMessage != null
-                                      ? kGray
-                                      : Colors.black,
-                                  FontWeight.w400)),
+                                  ? Colors.grey
+                                  : Colors.black,
+                              FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
                     ],
