@@ -20,4 +20,4 @@ const kOffWhite = Color(0xffF3F4F8);
 double hieght = 926.h;
 double width = 428.w;
 
-const String appBaseUrl = "http://192.168.137.1:6003";
+const String appBaseUrl = "https://full-code-be-foodly-full.onrender.com";
